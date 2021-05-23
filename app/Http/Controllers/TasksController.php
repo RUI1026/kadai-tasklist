@@ -46,6 +46,10 @@ class TasksController extends Controller
     public function store(Request $request)
     {
         
+        $request->validate([
+            'content' => 'required|max:255',
+        ]);
+        
         // タスクを作成
         $task = new task;
         $task->content = $request->content;
@@ -117,6 +121,12 @@ class TasksController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // idの値でタスクを検索して取得
+        $task = Task::findOrFail($id);
+        // タスクを削除
+        $task->delete();
+
+        // トップページへリダイレクトさせる
+        return redirect('/');
     }
 }
